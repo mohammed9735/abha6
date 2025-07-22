@@ -1,0 +1,67 @@
+{% include "header.html" %}
+
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>تسجيل حساب جديد</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="auth-btn">إنشاء الحساب</button>
+    </form>
+    <p class="auth-link">
+      لديك حساب بالفعل؟ <a href="/accounts/login/">تسجيل الدخول</a>
+    </p>
+  </div>
+</div>
+
+{% include "footer.html" %}
+
+<style>
+  body {
+    font-family: 'Tahoma', sans-serif;
+    background-color: #f5f7fb;
+    direction: rtl;
+  }
+  .auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+  }
+  .auth-card {
+    background: #fff;
+    padding: 30px 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+  }
+  .auth-card h2 {
+    text-align: center;
+    color: #1e3c88;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+  .auth-card form p {
+    margin-bottom: 15px;
+  }
+  .auth-card label {
+    display: block;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 5px;
+  }
+  .auth-card input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  .auth-card input:focus {
+    border-color: #1e3c88;
+  }
+  .auth-btn {
+    width: 100%;
+    background:

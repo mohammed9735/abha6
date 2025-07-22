@@ -1,0 +1,59 @@
+{% include "header.html" %}
+
+<main class="home">
+  <div class="hero">
+    <h2>مرحباً بك في متجرنا الإلكتروني</h2>
+    <p>أفضل المنتجات بأفضل الأسعار في مكان واحد</p>
+    <button class="btn-shop" onclick="shopNow()">تسوق الآن</button>
+  </div>
+</main>
+
+{% include "footer.html" %}
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Tahoma', sans-serif;
+    background-color: #f5f7fb;
+    direction: rtl;
+  }
+  .home {
+    text-align: center;
+    padding: 50px 20px;
+  }
+  .hero {
+    background: #fff;
+    padding: 40px;
+    max-width: 600px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  .hero h2 {
+    color: #1e3c88;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    color: #555;
+    margin-bottom: 20px;
+  }
+  .btn-shop {
+    background: linear-gradient(90deg, #1e3c88, #2a5fb8);
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .btn-shop:hover {
+    background: linear-gradient(90deg, #2a5fb8, #1e3c88);
+  }
+</style>
+
+<script>
+  function shopNow() {
+    window.location.href = "/products/";
+  }
+</script>
