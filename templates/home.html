@@ -1,10 +1,27 @@
 {% include "header.html" %}
 
 <main class="home">
+  <!-- القسم الترحيبي -->
   <div class="hero">
     <h2>مرحباً بك في متجرنا الإلكتروني</h2>
     <p>أفضل المنتجات بأفضل الأسعار في مكان واحد</p>
     <button class="btn-shop" onclick="shopNow()">تسوق الآن</button>
+  </div>
+
+  <!-- قسم عرض المنتجات كبنر -->
+  <div class="products-banner">
+    <h3>منتجاتنا المميزة</h3>
+    <div class="products-grid">
+      {% for product in products %}
+      <div class="product-card" onclick="goToProduct('{{ product.id }}')">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <h4>{{ product.name }}</h4>
+        <p class="price">{{ product.price }} ر.س</p>
+      </div>
+      {% empty %}
+      <p>لا توجد منتجات حالياً.</p>
+      {% endfor %}
+    </div>
   </div>
 </main>
 
@@ -17,26 +34,31 @@
     background-color: #f5f7fb;
     direction: rtl;
   }
+
   .home {
     text-align: center;
-    padding: 50px 20px;
+    padding: 30px 20px;
   }
+
   .hero {
     background: #fff;
     padding: 40px;
     max-width: 600px;
-    margin: 20px auto;
+    margin: 20px auto 40px auto;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
+
   .hero h2 {
     color: #1e3c88;
     margin-bottom: 10px;
   }
+
   .hero p {
     color: #555;
     margin-bottom: 20px;
   }
+
   .btn-shop {
     background: linear-gradient(90deg, #1e3c88, #2a5fb8);
     color: #fff;
@@ -47,13 +69,73 @@
     cursor: pointer;
     transition: background 0.3s ease;
   }
+
   .btn-shop:hover {
     background: linear-gradient(90deg, #2a5fb8, #1e3c88);
+  }
+
+  /* بنر المنتجات */
+  .products-banner {
+    margin-top: 30px;
+  }
+
+  .products-banner h3 {
+    color: #1e3c88;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+
+  .product-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  .product-card h4 {
+    color: #333;
+    font-size: 16px;
+    margin: 5px 0;
+  }
+
+  .product-card .price {
+    color: #1e3c88;
+    font-weight: bold;
+    font-size: 14px;
   }
 </style>
 
 <script>
   function shopNow() {
     window.location.href = "/products/";
+  }
+
+  function goToProduct(id) {
+    window.location.href = "/products/" + id + "/";
   }
 </script>

@@ -1,17 +1,23 @@
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
-# المسار الأساسي للمشروع
+# ================================
+# المسار الأساسي
+# ================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# مفتاح الأمان (تغييره عند النشر)
+# ================================
+# مفاتيح الأمان ووضع التطوير
+# ================================
 SECRET_KEY = 'django-insecure-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-
-# وضع التطوير (يجب جعله False في الإنتاج)
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
-# ✅ التطبيقات المثبتة
+# ================================
+# التطبيقات المثبتة
+# ================================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -25,9 +31,15 @@ INSTALLED_APPS = [
     'products',
     'orders',
     'accounts',
+
+    # ✅ Cloudinary
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
-# ✅ الوسطاء (Middlewares)
+# ================================
+# الوسطاء (Middlewares)
+# ================================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -38,13 +50,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# ================================
+# إعدادات الروابط والقوالب
+# ================================
 ROOT_URLCONF = 'abha6.urls'
 
-# ✅ إعدادات القوالب
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # مجلد القوالب العام
+        'DIRS': [BASE_DIR / 'templates'],  # المجلد العام للقوالب
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -59,7 +73,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'abha6.wsgi.application'
 
-# ✅ قاعدة البيانات (SQLite افتراضية)
+# ================================
+# قاعدة البيانات
+# ================================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -67,7 +83,9 @@ DATABASES = {
     }
 }
 
-# ✅ التحقق من كلمات المرور
+# ================================
+# التحقق من كلمات المرور
+# ================================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -75,22 +93,41 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ✅ اللغة والتوقيت
+# ================================
+# اللغة والتوقيت
+# ================================
 LANGUAGE_CODE = 'ar'
 TIME_ZONE = 'Asia/Riyadh'
-
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# ✅ الملفات الثابتة
-STATIC_URL = 'static/'
+# ================================
+# الملفات الثابتة والميديا
+# ================================
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]     # أثناء التطوير
+STATIC_ROOT = BASE_DIR / "staticfiles"       # بعد جمع الملفات عبر collectstatic
 
-# ✅ إعدادات رفع الصور (ميديا)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# ✅ إعداد Cloudinary للملفات الإعلامية
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dto3fm08p',  # ضع قيمتك الخاصة
+    'API_KEY': '926795448327751',  # ضع قيمتك الخاصة
+    'API_SECRET': 'GTr7Ib8lQ2JXM9yECQHWmWVGG6Y',  # ضع قيمتك الخاصة
+}
 
-# ✅ الحقول الافتراضية
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# ✅ إجبار مكتبة Cloudinary على قراءة الإعدادات تلقائيًا
+cloudinary.config(
+    cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key=CLOUDINARY_STORAGE['API_KEY'],
+    api_secret=CLOUDINARY_STORAGE['API_SECRET']
+)
+
+# ================================
+# الإعدادات الافتراضية
+# ================================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ✅ تعريف المستخدم المخصص
