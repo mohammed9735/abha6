@@ -2,6 +2,13 @@ from pathlib import Path
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import os
+from dotenv import load_dotenv
+
+# ================================
+# تحميل المتغيرات من ملف .env
+# ================================
+load_dotenv()
 
 # ================================
 # المسار الأساسي
@@ -11,9 +18,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ================================
 # مفاتيح الأمان ووضع التطوير
 # ================================
-SECRET_KEY = 'django-insecure-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+DEBUG = os.getenv("DEBUG", "True") == "True"
+
+# السماح بالنطاقات المحددة فقط في الإنتاج
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if not DEBUG else []
 
 # ================================
 # التطبيقات المثبتة
@@ -74,14 +83,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'abha6.wsgi.application'
 
 # ================================
-# قاعدة البيانات
+# قاعدة البيانات (تطوير + إنتاج)
 # ================================
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    # قاعدة التطوير SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    # قاعدة الإنتاج PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': os.getenv("DB_HOST"),
+            'PORT': os.getenv("DB_PORT"),
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+        }
+    }
 
 # ================================
 # التحقق من كلمات المرور
@@ -111,14 +134,13 @@ STATIC_ROOT = BASE_DIR / "staticfiles"       # بعد جمع الملفات عب
 
 # ✅ إعداد Cloudinary للملفات الإعلامية
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dto3fm08p',  # ضع قيمتك الخاصة
-    'API_KEY': '926795448327751',  # ضع قيمتك الخاصة
-    'API_SECRET': 'GTr7Ib8lQ2JXM9yECQHWmWVGG6Y',  # ضع قيمتك الخاصة
+    'CLOUD_NAME': os.getenv("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY': os.getenv("CLOUDINARY_API_KEY"),
+    'API_SECRET': os.getenv("CLOUDINARY_API_SECRET"),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# ✅ إجبار مكتبة Cloudinary على قراءة الإعدادات تلقائيًا
 cloudinary.config(
     cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
     api_key=CLOUDINARY_STORAGE['API_KEY'],
