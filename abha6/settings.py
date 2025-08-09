@@ -51,6 +51,10 @@ INSTALLED_APPS = [
 # ================================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # ✅ Whitenoise: تقديم ملفات static في الإنتاج بدون إعدادات خارجية
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,7 +90,6 @@ WSGI_APPLICATION = 'abha6.wsgi.application'
 # قاعدة البيانات (تطوير + إنتاج)
 # ================================
 if DEBUG:
-    # قاعدة التطوير SQLite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -94,7 +97,6 @@ if DEBUG:
         }
     }
 else:
-    # قاعدة الإنتاج PostgreSQL
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -130,17 +132,20 @@ USE_TZ = True
 # ================================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]     # أثناء التطوير
-STATIC_ROOT = BASE_DIR / "staticfiles"       # بعد جمع الملفات عبر collectstatic
+STATIC_ROOT = BASE_DIR / "staticfiles"       # هدف collectstatic للإنتاج
 
-# ✅ إعداد Cloudinary للملفات الإعلامية
+# ✅ Whitenoise storage مع manifest + ضغط للملفات
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ✅ Cloudinary للملفات الإعلامية (media)
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv("CLOUDINARY_CLOUD_NAME"),
     'API_KEY': os.getenv("CLOUDINARY_API_KEY"),
     'API_SECRET': os.getenv("CLOUDINARY_API_SECRET"),
 }
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# إجبار Cloudinary على قراءة الإعدادات (مفيد مع بعض البيئات)
 cloudinary.config(
     cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
     api_key=CLOUDINARY_STORAGE['API_KEY'],
